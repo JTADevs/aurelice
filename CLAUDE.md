@@ -157,3 +157,26 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
 </laravel-boost-guidelines>
+
+# Zasady projektu Aurelice
+
+## SEO (obowiązkowe przy każdej stronie)
+
+Strona jest budowana pod SEO. Frontend działa na Inertia.js v3 z SSR (Vue 3), żeby crawlery dostawały gotowy HTML.
+
+- Każda strona w `resources/js/pages/*.vue` MUSI ustawiać `<Head>` z `@inertiajs/vue3`: unikalny `title` (bez nazwy marki, dopisuje ją `app.js`) i `<meta name="description" head-key="description">` (do 160 znaków, po polsku).
+- Dla podstron produktów/kolekcji dodawaj też `og:title`, `og:description`, `og:image`, `link rel="canonical"` w `<Head>`, a dane strukturalne (JSON-LD `Product`, `BreadcrumbList`, `Organization`) renderuj po stronie serwera (props z kontrolera).
+- Semantyczny HTML: jeden `<h1>` na stronę, sekcje w `<section>` z nagłówkami `<h2>`, `<nav>` z `aria-label`, `<main>`, `<footer>`. Kolejność nagłówków bez przeskoków.
+- Każdy `<img>` ma `alt` (opisowy, po polsku), `width`/`height` i `loading="lazy"` poza hero.
+- Nawigacja między stronami przez `<Link>` z `@inertiajs/vue3` i nazwane trasy (`route()`), nigdy `<a href="#">` w docelowym kodzie.
+- Treść widoczna dla SEO nie może zależeć od JS po stronie klienta ani od `onMounted`. Komponenty muszą być SSR-safe: brak `window`/`document` poza `onMounted`.
+- Ślepe linki / placeholdery są dopuszczalne tylko tymczasowo i muszą być oznaczone w kodzie.
+
+### SSR – jak to działa
+
+- Inertia v3: `resources/js/app.js` (klient) i `resources/js/ssr.js` (SSR) wywołują `createInertiaApp` bez `setup`; plugin `@inertiajs/vite` (w `vite.config.js`) sam dokłada bootstrap serwera i zamienia `pages: './pages'` na resolver. Nie pisz ręcznie `createServer` ani `import.meta.glob`.
+- Dev: gdy działa `npm run dev`, Laravel renderuje SSR przez endpoint Vite `/__inertia_ssr` (z HMR). Osobny serwer SSR nie jest wtedy potrzebny.
+- Prod: `npm run build` buduje klienta i bundle `bootstrap/ssr/ssr.js` (ignorowany w git), a `php artisan inertia:start-ssr` uruchamia serwer na porcie 13714 (`config/inertia.php`, `.env`: `INERTIA_SSR_*`).
+- Sail: `node_modules` jest współdzielone z kontenerem, więc **wszystkie komendy npm uruchamiaj w kontenerze** (`vendor/bin/sail npm ...`). Lokalny `npm install` na macOS usuwa binarki Linuxa (Rolldown) i wywala Vite w kontenerze. Laravel łączy się z SSR pod `127.0.0.1`, więc Vite / serwer SSR muszą działać w kontenerze `laravel.test`.
+- Gdy SSR zawiedzie, Inertia po cichu wraca do renderowania po stronie klienta. Weryfikuj przez `curl http://localhost` i sprawdzaj, czy w HTML jest `<h1>` i treść, a nie tylko pusty `<div id="app" data-page=...>`. Do debugowania ustaw `INERTIA_SSR_THROW_ON_ERROR=true`.
+- Testy stron: `assertInertia(fn (AssertableInertia $page) => $page->component('Nazwa'))`, komponenty w `resources/js/pages`.

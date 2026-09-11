@@ -5,7 +5,4 @@ const appName = import.meta.env.VITE_APP_NAME || 'Aurelice';
 createInertiaApp({
     title: (title) => (title ? `${title} – ${appName}` : appName),
     pages: './pages',
-    progress: {
-        color: '#440512',
-    },
 });
