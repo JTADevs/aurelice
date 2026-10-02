@@ -1,17 +1,22 @@
 <script setup>
+import { Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import BrandLogo from './BrandLogo.vue';
 
 const navigation = [
-    { label: 'Nowości', href: '#nowosci' },
-    { label: 'Naszyjniki', href: '#kolekcje' },
-    { label: 'Kolczyki', href: '#kolekcje' },
-    { label: 'Bransoletki', href: '#kolekcje' },
-    { label: 'Pierścionki', href: '#kolekcje' },
-    { label: 'O nas', href: '#o-nas' },
+    { label: 'Nowości', href: '/produkty' },
+    { label: 'Naszyjniki', href: '/produkty/naszyjniki' },
+    { label: 'Bransoletki', href: '/produkty/bransoletki' },
+    { label: 'Komplety', href: '/produkty/komplety' },
+    { label: 'O nas', href: '/#o-nas' },
 ];
 
+const page = usePage();
 const isMenuOpen = ref(false);
+
+function isActive(item) {
+    return page.url.split('?')[0] === item.href;
+}
 </script>
 
 <template>
@@ -61,7 +66,14 @@ const isMenuOpen = ref(false);
         <nav class="hidden border-t border-cream/15 lg:block" aria-label="Kategorie">
             <ul class="mx-auto flex max-w-7xl justify-center gap-10 px-8 py-4 text-[11px] font-medium tracking-[0.22em] uppercase">
                 <li v-for="item in navigation" :key="item.label">
-                    <a :href="item.href" class="text-cream/80 transition-colors hover:text-cream">{{ item.label }}</a>
+                    <Link
+                        :href="item.href"
+                        class="border-b pb-1 transition-colors hover:text-cream"
+                        :class="isActive(item) ? 'border-cream text-cream' : 'border-transparent text-cream/80'"
+                        :aria-current="isActive(item) ? 'page' : undefined"
+                    >
+                        {{ item.label }}
+                    </Link>
                 </li>
             </ul>
         </nav>
@@ -69,7 +81,15 @@ const isMenuOpen = ref(false);
         <nav v-show="isMenuOpen" id="mobile-menu" class="border-t border-cream/15 lg:hidden" aria-label="Menu mobilne">
             <ul class="flex flex-col px-6 py-4 text-xs font-medium tracking-[0.22em] uppercase">
                 <li v-for="item in navigation" :key="item.label">
-                    <a :href="item.href" class="block py-3 text-cream/85" @click="isMenuOpen = false">{{ item.label }}</a>
+                    <Link
+                        :href="item.href"
+                        class="block py-3"
+                        :class="isActive(item) ? 'text-cream' : 'text-cream/70'"
+                        :aria-current="isActive(item) ? 'page' : undefined"
+                        @click="isMenuOpen = false"
+                    >
+                        {{ item.label }}
+                    </Link>
                 </li>
             </ul>
         </nav>

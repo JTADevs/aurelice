@@ -44,7 +44,7 @@ Zdjęcia produktowe mają ciepłe, beżowe tony – placeholdery też trzymaj w 
 Zasady:
 - Etykiety, przyciski, nawigacja: Montserrat, wielkie litery, duży tracking (`uppercase tracking-[0.2em]`), mały rozmiar (`text-xs`/`text-sm`).
 - Nagłówki sekcji: `font-display`, waga normalna, bez uppercase (poza logo w mockupach, które jest w wersji "Aurelice" z wielkiej litery).
-- Logo tekstowe: `Aurelice` (`font-display`) + pod spodem `JEWELLERY` (Montserrat, `tracking-[0.35em]`, ~10px). Sygnet: monogram litery „A".
+- Logo: pliki od klienta w `references/part2/LOGO 1.png` (pełny znak) i `LOGO 2.png` (sygnet „A" + JEWELLERY). Na stronie używamy wersji WebP z przezroczystym tłem i kremowym znakiem: `public/images/brand/aurelice-logo.webp` (800×303) i `aurelice-sygnet.webp` (400×473), przez komponent `BrandLogo.vue` (`variant="logo"` w nagłówku, `variant="sygnet"` w stopce). Nie odtwarzaj logo tekstem.
 
 ## Układ strony (wg stron referencyjnych: umiar.com, effijewelry.com)
 

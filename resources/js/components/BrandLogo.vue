@@ -1,18 +1,20 @@
 <script setup>
-defineProps({
-    size: { type: String, default: 'md' },
+import { Link } from '@inertiajs/vue3';
+
+const props = defineProps({
+    variant: { type: String, default: 'logo' },
 });
 
-const sizes = {
-    sm: { name: 'text-2xl', tag: 'text-[8px] tracking-[0.35em]' },
-    md: { name: 'text-3xl md:text-4xl', tag: 'text-[9px] tracking-[0.4em]' },
-    lg: { name: 'text-5xl md:text-6xl', tag: 'text-[11px] tracking-[0.45em]' },
+const variants = {
+    logo: { src: '/images/brand/aurelice-logo.webp', width: 800, height: 303, class: 'h-12 w-auto md:h-16' },
+    sygnet: { src: '/images/brand/aurelice-sygnet.webp', width: 400, height: 473, class: 'h-20 w-auto' },
 };
+
+const logo = variants[props.variant];
 </script>
 
 <template>
-    <a href="/" class="inline-flex flex-col items-center leading-none" aria-label="Aurelice Jewellery – strona główna">
-        <span class="font-display" :class="sizes[size].name">Aurelice</span>
-        <span class="mt-1 font-sans font-light uppercase" :class="sizes[size].tag">Jewellery</span>
-    </a>
+    <Link href="/" class="inline-flex" aria-label="Aurelice Jewellery – strona główna">
+        <img :src="logo.src" :width="logo.width" :height="logo.height" :class="logo.class" alt="Logo Aurelice Jewellery" />
+    </Link>
 </template>

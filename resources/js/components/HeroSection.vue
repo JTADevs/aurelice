@@ -15,7 +15,7 @@ import ImagePlaceholder from './ImagePlaceholder.vue';
                 Ręcznie wykonana biżuteria z naturalnych kamieni i pereł
             </h1>
             <p class="max-w-xl text-sm font-light leading-relaxed md:text-base">
-                Minimalistyczne formy, które zmieniają się wraz z każdym gestem.
+                Minimalistyczne formy, które nabierają życia, gdy je nosisz.
             </p>
             <a
                 href="#kolekcje"

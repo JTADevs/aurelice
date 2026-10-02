@@ -12,8 +12,10 @@ import ImagePlaceholder from './ImagePlaceholder.vue';
                 <p class="text-[11px] font-medium tracking-[0.3em] uppercase">O marce</p>
                 <h2 class="font-display text-3xl leading-tight md:text-5xl">Biżuteria, która żyje z Tobą</h2>
                 <p class="max-w-md text-sm font-light leading-relaxed text-cream/80">
-                    Każdy element powstaje ręcznie w naszej pracowni. Wybieramy naturalne kamienie
-                    i perły o niepowtarzalnych kształtach, aby każda sztuka była jedyna w swoim rodzaju.
+                    Aurelice powstaje z zamiłowania do naturalnych kamieni i subtelnej biżuterii. W naszej
+                    pracowni ręcznie tworzymy każdy projekt, dbając o dobór kolorów, proporcje i wykończenie
+                    detali. Chcemy, aby nasze projekty towarzyszyły Ci w codziennych chwilach i wyjątkowych
+                    momentach jako drobny detal, który wyraża Twój styl i ma dla Ciebie osobiste znaczenie.
                 </p>
                 <a
                     href="#"

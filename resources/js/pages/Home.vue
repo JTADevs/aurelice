@@ -8,6 +8,11 @@ import NewArrivalsSection from '@/components/NewArrivalsSection.vue';
 import NewsletterSection from '@/components/NewsletterSection.vue';
 import SiteFooter from '@/components/SiteFooter.vue';
 import SiteHeader from '@/components/SiteHeader.vue';
+
+defineProps({
+    collections: { type: Array, required: true },
+    newArrivals: { type: Array, required: true },
+});
 </script>
 
 <template>
@@ -15,15 +20,15 @@ import SiteHeader from '@/components/SiteHeader.vue';
         <meta
             head-key="description"
             name="description"
-            content="Aurelice Jewellery – ręcznie wykonana biżuteria z naturalnych kamieni i pereł. Naszyjniki, kolczyki, bransoletki i pierścionki tworzone w naszej pracowni."
+            content="Aurelice Jewellery – ręcznie wykonana biżuteria z naturalnych kamieni i pereł. Naszyjniki, bransoletki i komplety tworzone w naszej pracowni."
         />
     </Head>
     <AnnouncementBar />
     <SiteHeader />
     <main>
         <HeroSection />
-        <CollectionsSection />
-        <NewArrivalsSection />
+        <CollectionsSection :collections="collections" />
+        <NewArrivalsSection :products="newArrivals" />
         <BrandStorySection />
         <NewsletterSection />
     </main>

@@ -114,4 +114,15 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Administrator Password
+    |--------------------------------------------------------------------------
+    |
+    | Password assigned to the administrator account by AdminUserSeeder.
+    |
+    */
+
+    'admin_password' => env('ADMIN_PASSWORD'),
+
 ];
