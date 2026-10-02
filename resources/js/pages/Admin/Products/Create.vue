@@ -11,6 +11,7 @@ const form = useForm({
     name: '',
     category: '',
     price: '',
+    fulfillment_days: 1,
     description: '',
     is_published: true,
     images: [],

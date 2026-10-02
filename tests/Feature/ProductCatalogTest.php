@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\ProductCategory;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -72,5 +73,59 @@ class ProductCatalogTest extends TestCase
             ->where('products.current_page', 2)
             ->where('canonicalUrl', route('products.index').'?page=2')
         );
+    }
+
+    public function test_product_page_shows_details_gallery_and_related_products(): void
+    {
+        $this->freezeTime();
+        $product = Product::factory()->create([
+            'name' => 'Apricity',
+            'slug' => 'apricity',
+            'category' => ProductCategory::Necklaces,
+            'price' => 34900,
+            'fulfillment_days' => 5,
+            'description' => 'Naszyjnik z cytrynem.',
+        ]);
+        $second = ProductImage::factory()->for($product)->create(['sort_order' => 1]);
+        $main = ProductImage::factory()->for($product)->create(['sort_order' => 0]);
+        $related = Product::factory()->create(['category' => ProductCategory::Necklaces]);
+        Product::factory()->create(['category' => ProductCategory::Bracelets]);
+        Product::factory()->unpublished()->create(['category' => ProductCategory::Necklaces]);
+
+        $response = $this->get(route('products.show', $product));
+
+        $response->assertOk();
+        $response->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Product')
+            ->where('product.name', 'Apricity')
+            ->where('product.price', 34900)
+            ->where('product.fulfillment_days', 5)
+            ->where('product.description', 'Naszyjnik z cytrynem.')
+            ->where('product.category', ['value' => 'naszyjniki', 'label' => 'Naszyjniki'])
+            ->where('product.images.0.id', $main->id)
+            ->where('product.images.1.id', $second->id)
+            ->has('relatedProducts', 1)
+            ->where('relatedProducts.0.id', $related->id)
+            ->where('canonicalUrl', url('/produkt/apricity'))
+            ->where('metaDescription', 'Naszyjnik z cytrynem.')
+        );
+        $response->assertSee('"@type":"Product"', false);
+        $response->assertSee('"price":"349.00"', false);
+        $response->assertSee('"priceCurrency":"PLN"', false);
+    }
+
+    public function test_unpublished_product_page_returns_not_found(): void
+    {
+        $product = Product::factory()->unpublished()->create();
+
+        $this->get(route('products.show', $product))->assertNotFound();
+    }
+
+    public function test_product_tiles_link_to_the_product_page(): void
+    {
+        Product::factory()->create(['slug' => 'dalia']);
+
+        $this->get(route('products.index'))
+            ->assertInertia(fn (AssertableInertia $page) => $page->where('products.data.0.slug', 'dalia'));
     }
 }

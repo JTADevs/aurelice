@@ -57,6 +57,7 @@ class ProductManagementTest extends TestCase
             'name' => 'Rosé Bransoletka',
             'category' => ProductCategory::Bracelets->value,
             'price' => '249,99',
+            'fulfillment_days' => '3',
             'description' => 'Kwarc różowy i perły.',
             'is_published' => '1',
             'images' => [
@@ -71,6 +72,7 @@ class ProductManagementTest extends TestCase
         $this->assertSame('rose-bransoletka', $product->slug);
         $this->assertSame(ProductCategory::Bracelets, $product->category);
         $this->assertSame(24999, $product->price);
+        $this->assertSame(3, $product->fulfillment_days);
         $this->assertTrue($product->is_published);
 
         $images = $product->images;
@@ -87,10 +89,11 @@ class ProductManagementTest extends TestCase
             'name' => 'Dalia',
             'category' => 'kolczyki',
             'price' => '12,345',
+            'fulfillment_days' => '0',
             'images' => [UploadedFile::fake()->create('notatki.pdf', 100, 'application/pdf')],
         ]);
 
-        $response->assertSessionHasErrors(['slug', 'category', 'price', 'images.0']);
+        $response->assertSessionHasErrors(['slug', 'category', 'price', 'fulfillment_days', 'images.0']);
         $this->assertSame(1, Product::count());
     }
 
@@ -103,6 +106,7 @@ class ProductManagementTest extends TestCase
             'name' => 'Solea Naszyjnik',
             'category' => ProductCategory::Necklaces->value,
             'price' => '310',
+            'fulfillment_days' => '7',
             'description' => '',
             'is_published' => '0',
             'images' => [UploadedFile::fake()->image('nowe.webp', 1000, 1000)],
@@ -114,6 +118,7 @@ class ProductManagementTest extends TestCase
         $this->assertSame('Solea Naszyjnik', $product->name);
         $this->assertSame('solea', $product->slug);
         $this->assertSame(31000, $product->price);
+        $this->assertSame(7, $product->fulfillment_days);
         $this->assertFalse($product->is_published);
         $this->assertSame([$existingImage->id], [$product->images->first()->id]);
         $this->assertCount(2, $product->images);

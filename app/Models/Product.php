@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['name', 'slug', 'category', 'price', 'description', 'is_published'])]
+#[Fillable(['name', 'slug', 'category', 'price', 'fulfillment_days', 'description', 'is_published'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -28,6 +28,7 @@ class Product extends Model
         return [
             'category' => ProductCategory::class,
             'price' => 'integer',
+            'fulfillment_days' => 'integer',
             'is_published' => 'boolean',
         ];
     }
@@ -68,13 +69,14 @@ class Product extends Model
      *
      * Requires the mainImage relation to be loaded.
      *
-     * @return array{id: int, name: string, category: string, price: int, image: ?array{url: string, width: int, height: int}}
+     * @return array{id: int, name: string, slug: string, category: string, price: int, image: ?array{url: string, width: int, height: int}}
      */
     public function toCardArray(): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'slug' => $this->slug,
             'category' => $this->category->label(),
             'price' => $this->price,
             'image' => $this->mainImage?->only(['url', 'width', 'height']),

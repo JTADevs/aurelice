@@ -16,6 +16,11 @@ class StoreProductRequest extends FormRequest
     public const int MAX_IMAGES = 10;
 
     /**
+     * Longest allowed order fulfillment time in days.
+     */
+    public const int MAX_FULFILLMENT_DAYS = 60;
+
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
@@ -59,6 +64,7 @@ class StoreProductRequest extends FormRequest
         return [
             'category' => ['required', Rule::enum(ProductCategory::class)],
             'price' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:100000'],
+            'fulfillment_days' => ['required', 'integer', 'min:1', 'max:'.self::MAX_FULFILLMENT_DAYS],
             'description' => ['nullable', 'string', 'max:5000'],
             'is_published' => ['boolean'],
             'images' => ['array', 'max:'.self::MAX_IMAGES],
@@ -93,6 +99,10 @@ class StoreProductRequest extends FormRequest
             'price.decimal' => 'Cena może mieć maksymalnie 2 miejsca po przecinku.',
             'price.min' => 'Cena nie może być ujemna.',
             'price.max' => 'Cena nie może przekraczać :max zł.',
+            'fulfillment_days.required' => 'Podaj czas realizacji zamówienia.',
+            'fulfillment_days.integer' => 'Czas realizacji podaj w pełnych dniach.',
+            'fulfillment_days.min' => 'Czas realizacji to co najmniej :min dzień.',
+            'fulfillment_days.max' => 'Czas realizacji może wynosić maksymalnie :max dni.',
             'description.max' => 'Opis może mieć maksymalnie :max znaków.',
             'images.max' => 'Możesz dodać naraz maksymalnie :max zdjęć.',
             'images.*.image' => 'Plik musi być zdjęciem.',

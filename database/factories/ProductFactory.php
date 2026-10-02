@@ -26,6 +26,7 @@ class ProductFactory extends Factory
             'slug' => Str::slug($name),
             'category' => fake()->randomElement(ProductCategory::cases()),
             'price' => fake()->numberBetween(150, 600) * 100,
+            'fulfillment_days' => 1,
             'description' => fake()->paragraph(),
             'is_published' => true,
         ];

@@ -83,6 +83,22 @@ const labelClass = 'text-[11px] tracking-[0.2em] uppercase';
                 <p v-if="form.errors.price" class="text-xs" role="alert">{{ form.errors.price }}</p>
             </div>
 
+            <div class="flex flex-col gap-2">
+                <label for="fulfillment_days" :class="labelClass">Czas realizacji zamówienia (dni)</label>
+                <input
+                    id="fulfillment_days"
+                    v-model.number="form.fulfillment_days"
+                    type="number"
+                    inputmode="numeric"
+                    min="1"
+                    max="60"
+                    step="1"
+                    required
+                    :class="inputClass"
+                />
+                <p v-if="form.errors.fulfillment_days" class="text-xs" role="alert">{{ form.errors.fulfillment_days }}</p>
+            </div>
+
             <div class="flex flex-col gap-2 md:col-span-2">
                 <label for="description" :class="labelClass">Opis</label>
                 <textarea id="description" v-model="form.description" rows="6" maxlength="5000" :class="inputClass" />

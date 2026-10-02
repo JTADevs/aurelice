@@ -57,7 +57,7 @@ class ProductController extends Controller
     {
         $product = DB::transaction(function () use ($request): Product {
             $product = Product::create([
-                ...$request->safe()->only(['name', 'slug', 'category', 'description', 'is_published']),
+                ...$request->safe()->only(['name', 'slug', 'category', 'fulfillment_days', 'description', 'is_published']),
                 'price' => $request->priceInGrosze(),
             ]);
 
@@ -85,6 +85,7 @@ class ProductController extends Controller
                 'slug' => $product->slug,
                 'category' => $product->category->value,
                 'price' => $product->price,
+                'fulfillment_days' => $product->fulfillment_days,
                 'description' => $product->description,
                 'is_published' => $product->is_published,
                 'images' => $product->images->map(fn (ProductImage $image): array => [
@@ -105,7 +106,7 @@ class ProductController extends Controller
     {
         DB::transaction(function () use ($request, $product): void {
             $product->update([
-                ...$request->safe()->only(['name', 'category', 'description', 'is_published']),
+                ...$request->safe()->only(['name', 'category', 'fulfillment_days', 'description', 'is_published']),
                 'price' => $request->priceInGrosze(),
             ]);
 

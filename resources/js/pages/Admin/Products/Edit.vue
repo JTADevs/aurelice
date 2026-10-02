@@ -20,6 +20,7 @@ const form = useForm({
     name: props.product.name,
     category: props.product.category,
     price: priceForInput(props.product.price),
+    fulfillment_days: props.product.fulfillment_days,
     description: props.product.description ?? '',
     is_published: props.product.is_published,
     images: [],
@@ -57,7 +58,18 @@ function destroyProduct() {
 
     <AdminLayout>
         <Link href="/admin/products" class="text-[11px] tracking-[0.2em] uppercase text-burgundy/60 hover:text-burgundy">← Produkty</Link>
-        <h1 class="mt-4 mb-10 font-display text-4xl md:text-5xl">{{ product.name }}</h1>
+        <div class="mt-4 mb-10 flex flex-wrap items-end justify-between gap-4">
+            <h1 class="font-display text-4xl md:text-5xl">{{ product.name }}</h1>
+            <a
+                v-if="product.is_published"
+                :href="`/produkt/${product.slug}`"
+                target="_blank"
+                rel="noopener"
+                class="text-[11px] tracking-[0.2em] uppercase underline"
+            >
+                Zobacz w sklepie
+            </a>
+        </div>
 
         <ProductForm ref="productForm" :form="form" :categories="categories" submit-label="Zapisz zmiany" @submit="submit">
             <template #existing-images>
